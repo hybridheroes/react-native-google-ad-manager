@@ -295,9 +295,14 @@ class BannerView extends ReactViewGroup {
 
             for (Map.Entry<String, Object> entry : targeting.entrySet()) {
                 String key = entry.getKey();
-                ArrayList value =  (ArrayList) entry.getValue();
-
-                adRequestBuilder.addCustomTargeting(key, value);
+                
+                if (entry.getValue() instanceof String) {
+                    String value = (String) entry.getValue();
+                    adRequestBuilder.addCustomTargeting(key, value);
+                } else {
+                    ArrayList value =  (ArrayList) entry.getValue();
+                    adRequestBuilder.addCustomTargeting(key, value);
+                }
             }
 
             final PublisherAdRequest adRequest = adRequestBuilder.build();
