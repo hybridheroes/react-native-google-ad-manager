@@ -31,6 +31,7 @@ import org.prebid.mobile.OnCompleteListener;
 import org.prebid.mobile.addendum.AdViewUtils;
 import org.prebid.mobile.addendum.PbFindSizeError;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -289,18 +290,27 @@ class BannerView extends ReactViewGroup {
         try {
             PublisherAdRequest.Builder adRequestBuilder = new PublisherAdRequest.Builder();
 
-            for(String testId : testDeviceIds){
+            for(String testId : testDeviceIds) {
                 adRequestBuilder.addTestDevice(testId);
             }
 
             for (Map.Entry<String, Object> entry : targeting.entrySet()) {
                 String key = entry.getKey();
-                
+
                 if (entry.getValue() instanceof String) {
                     String value = (String) entry.getValue();
                     adRequestBuilder.addCustomTargeting(key, value);
                 } else {
-                    ArrayList value =  (ArrayList) entry.getValue();
+                    ArrayList value = new ArrayList<>();
+
+                    for (Object parameter : (ArrayList) entry.getValue()) {
+                        if (parameter instanceof Number) {
+                            DecimalFormat format = new DecimalFormat("0.#");
+                            value.add(format.format(parameter));
+                        } else {
+                            value.add(parameter);
+                        }
+                    }
                     adRequestBuilder.addCustomTargeting(key, value);
                 }
             }
