@@ -300,7 +300,7 @@ class BannerView extends ReactViewGroup {
                 if (entry.getValue() instanceof String) {
                     String value = (String) entry.getValue();
                     adRequestBuilder.addCustomTargeting(key, value);
-                } else {
+                } else if (entry.getValue() instanceof ArrayList) {
                     ArrayList value = new ArrayList<>();
 
                     for (Object parameter : (ArrayList) entry.getValue()) {
